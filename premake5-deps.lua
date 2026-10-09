@@ -122,6 +122,24 @@ newoption {
     description = "Extract sheenbidi",
 }
 
+newoption {
+    category = "extract",
+    trigger = "ext-freetype",
+    description = "Extract freetype",
+}
+
+newoption {
+    category = "extract",
+    trigger = "ext-harfbuzz",
+    description = "Extract harfbuzz",
+}
+
+newoption {
+    category = "extract",
+    trigger = "ext-libraqm",
+    description = "Extract libraqm",
+}
+
 -- build
 newoption {
     category = "build",
@@ -207,6 +225,18 @@ newoption {
     category = "build",
     trigger = "build-sheenbidi",
     description = "Build sheenbidi",
+}
+
+newoption {
+    category = "build",
+    trigger = "build-freetype",
+    description = "Build freetype",
+}
+
+newoption {
+    category = "build",
+    trigger = "build-harfbuzz",
+    description = "Build harfbuzz",
 }
 
 local function merge_list(src, dest)
@@ -513,6 +543,15 @@ end
 if _OPTIONS["ext-sheenbidi"] or _OPTIONS["all-ext"] then
     table.insert(deps_to_extract, { 'sheenbidi/sheenbidi.tar.gz', 'sheenbidi' })
 end
+if _OPTIONS["ext-freetype"] or _OPTIONS["all-ext"] then
+    table.insert(deps_to_extract, { 'freetype/freetype.tar.gz', 'freetype' })
+end
+if _OPTIONS["ext-harfbuzz"] or _OPTIONS["all-ext"] then
+    table.insert(deps_to_extract, { 'harfbuzz/harfbuzz.tar.gz', 'harfbuzz' })
+end
+if _OPTIONS["ext-libraqm"] or _OPTIONS["all-ext"] then
+    table.insert(deps_to_extract, { 'libraqm/libraqm.tar.gz', 'libraqm' })
+end
 
 -- start extraction
 for _, dep in pairs(deps_to_extract) do
@@ -802,6 +841,318 @@ if _OPTIONS["build-protobuf"] or _OPTIONS["all-build"] then
     end
 end
 
+-- ---------------------------------------------------------------------------
+-- RTL Dear ImGui fork integration for ingame_overlay
+--
+-- ingame_overlay vendors Dear ImGui (core + overlay-patched backends) and compiles it into the
+-- overlay library. Replace that core with the RTL fork (third-party/imgui-rtl submodule) and
+-- compile libraqm + the RTL shaper into the library, so every overlay string is shaped and
+-- bidi-reordered by libraqm (HarfBuzz + SheenBidi + FreeType).
+-- See third-party/imgui-rtl-overlay/README.md.
+-- ---------------------------------------------------------------------------
+local rtl_imgui_core_files = {
+    'imconfig.h',
+    'imgui.cpp',
+    'imgui.h',
+    'imgui_draw.cpp',
+    'imgui_internal.h',
+    'imgui_tables.cpp',
+    'imgui_widgets.cpp',
+    'imstb_rectpack.h',
+    'imstb_textedit.h',
+    'imstb_truetype.h',
+    'LICENSE.txt',
+}
+
+local rtl_imgui_misc_files = {
+    'misc/rtl/imgui_rtl.h',
+    'misc/rtl/imgui_rtl.cpp',
+    'misc/freetype/imgui_freetype.h',
+    'misc/freetype/imgui_freetype.cpp',
+}
+
+local rtl_cmake_block_template = [[
+
+# ---------------------------------------------------------------------------
+# GBE_RTL_IMGUI_BEGIN
+#
+# RTL Dear ImGui integration, appended by premake5-deps.lua.
+# Compiles the RTL shaper (misc/rtl), the FreeType glyph loader (misc/freetype) and libraqm
+# into the overlay library, linking them against the dependency builds of FreeType, HarfBuzz
+# and SheenBidi. See third-party/imgui-rtl-overlay/README.md.
+# ---------------------------------------------------------------------------
+set(GBE_RTL_DEPS_DIR "%s")
+
+if(CMAKE_SIZEOF_VOID_P EQUAL 4)
+  set(GBE_RTL_ARCH "32")
+elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64|arm64|ARM64)$")
+  set(GBE_RTL_ARCH "arm")
+else()
+  set(GBE_RTL_ARCH "64")
+endif()
+
+set(GBE_RTL_FREETYPE_DIR "${GBE_RTL_DEPS_DIR}/freetype/install${GBE_RTL_ARCH}")
+set(GBE_RTL_HARFBUZZ_DIR "${GBE_RTL_DEPS_DIR}/harfbuzz/install${GBE_RTL_ARCH}")
+set(GBE_RTL_SHEENBIDI_DIR "${GBE_RTL_DEPS_DIR}/sheenbidi/install${GBE_RTL_ARCH}")
+set(GBE_RTL_LIBRAQM_DIR "${GBE_RTL_DEPS_DIR}/libraqm")
+
+foreach(gbe_rtl_dir "${GBE_RTL_DEPS_DIR}/freetype" "${GBE_RTL_DEPS_DIR}/harfbuzz"
+                    "${GBE_RTL_DEPS_DIR}/sheenbidi" "${GBE_RTL_DEPS_DIR}/libraqm")
+  if(NOT EXISTS "${gbe_rtl_dir}")
+    message(FATAL_ERROR "GBE RTL: missing dependency directory '${gbe_rtl_dir}'. Run premake5-deps.lua with --all-ext --all-build first.")
+  endif()
+endforeach()
+
+target_sources(ingame_overlay PRIVATE
+  "${CMAKE_CURRENT_SOURCE_DIR}/deps/ImGui/misc/freetype/imgui_freetype.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/deps/ImGui/misc/rtl/imgui_rtl.cpp"
+  "${GBE_RTL_LIBRAQM_DIR}/src/raqm.c"
+)
+
+target_include_directories(ingame_overlay PRIVATE
+  "${CMAKE_CURRENT_SOURCE_DIR}/deps/ImGui/misc/freetype"
+  "${CMAKE_CURRENT_SOURCE_DIR}/deps/ImGui/misc/rtl"
+  "${GBE_RTL_LIBRAQM_DIR}/src"
+  "${GBE_RTL_FREETYPE_DIR}/include/freetype2"
+  "${GBE_RTL_HARFBUZZ_DIR}/include/harfbuzz"
+  "${GBE_RTL_SHEENBIDI_DIR}/include"
+)
+
+target_compile_definitions(ingame_overlay PRIVATE
+  IMGUI_ENABLE_FREETYPE
+  IMGUI_ENABLE_RTL
+  HAVE_CONFIG_H
+  RAQM_SHEENBIDI_GT_2_9
+)
+
+target_link_libraries(ingame_overlay PRIVATE
+  "${GBE_RTL_FREETYPE_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}freetype${CMAKE_STATIC_LIBRARY_SUFFIX}"
+  "${GBE_RTL_HARFBUZZ_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}harfbuzz${CMAKE_STATIC_LIBRARY_SUFFIX}"
+  "${GBE_RTL_SHEENBIDI_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}SheenBidi${CMAKE_STATIC_LIBRARY_SUFFIX}"
+)
+
+# The RTL fork's core still references the ImDrawListFlags_* aliases that
+# IMGUI_DISABLE_OBSOLETE_FUNCTIONS removes, so strip that define from the target
+# (ingame_overlay adds it in its own target_compile_definitions()).
+foreach(gbe_rtl_defs_prop COMPILE_DEFINITIONS INTERFACE_COMPILE_DEFINITIONS)
+  get_target_property(gbe_rtl_defs ingame_overlay ${gbe_rtl_defs_prop})
+  if(gbe_rtl_defs)
+    if(NOT gbe_rtl_defs MATCHES "-NOTFOUND$")
+      list(REMOVE_ITEM gbe_rtl_defs IMGUI_DISABLE_OBSOLETE_FUNCTIONS)
+      set_target_properties(ingame_overlay PROPERTIES ${gbe_rtl_defs_prop} "${gbe_rtl_defs}")
+    endif()
+  endif()
+endforeach()
+# GBE_RTL_IMGUI_END
+# ---------------------------------------------------------------------------
+]]
+
+local function apply_rtl_imgui_overlay_patch()
+    local overlay_dir = path.join(deps_dir, 'ingame_overlay')
+    local imgui_dir = path.join(overlay_dir, 'deps', 'ImGui')
+    local rtl_imgui_dir = path.join(third_party_dir, 'imgui-rtl')
+    local rtl_overlay_dir = path.join(third_party_dir, 'imgui-rtl-overlay')
+    local raqm_dir = path.join(deps_dir, 'libraqm')
+
+    if not os.isdir(overlay_dir) then
+        error('RTL imgui: ingame_overlay is not extracted at "' .. overlay_dir .. '". Run with --ext-ingame_overlay (or --all-ext) first.')
+        return
+    end
+    if not os.isdir(rtl_imgui_dir) then
+        error('RTL imgui: the RTL imgui fork submodule is missing at "' .. rtl_imgui_dir .. '". Run: git submodule update --init third-party/imgui-rtl')
+        return
+    end
+    if not os.isdir(raqm_dir) then
+        error('RTL imgui: libraqm is not extracted at "' .. raqm_dir .. '". Run with --ext-libraqm (or --all-ext) first.')
+        return
+    end
+
+    print('\n\napplying RTL Dear ImGui integration to: "' .. overlay_dir .. '"')
+
+    -- 1) overlay the RTL fork's Dear ImGui core on top of the vendored, overlay-patched copy.
+    --    deps/ImGui/backends and imgui_win_shader_blobs.* stay as they are: they carry the
+    --    overlay-specific backend patches and are compatible with the fork's core.
+    for _, rel_file in pairs(rtl_imgui_core_files) do
+        local src = path.join(rtl_imgui_dir, rel_file)
+        local dst = path.join(imgui_dir, rel_file)
+        if not os.isfile(src) then
+            error('RTL imgui: missing fork file: ' .. src)
+            return
+        end
+        if not os.copyfile(src, dst) then
+            error('RTL imgui: failed to copy "' .. src .. '" to "' .. dst .. '"')
+            return
+        end
+    end
+
+    -- 2) shaper + FreeType glyph loader addons
+    os.mkdir(path.join(imgui_dir, 'misc', 'rtl'))
+    os.mkdir(path.join(imgui_dir, 'misc', 'freetype'))
+    for _, rel_file in pairs(rtl_imgui_misc_files) do
+        local src = path.join(rtl_imgui_dir, rel_file)
+        local dst = path.join(imgui_dir, rel_file)
+        if not os.isfile(src) then
+            error('RTL imgui: missing fork file: ' .. src)
+            return
+        end
+        if not os.copyfile(src, dst) then
+            error('RTL imgui: failed to copy "' .. src .. '" to "' .. dst .. '"')
+            return
+        end
+    end
+
+    -- 3) the vendored DX12 backend commented out ImGui_ImplDX12_InitInfo::SrvDescriptorHeap in
+    --    its header, but its legacy Init() still assigns it. That legacy block is only compiled
+    --    when obsolete functions are enabled, which is how the RTL fork's core must be built
+    --    (the 1.92-era backends use other obsolete APIs such as ImDrawData::CmdListsCount).
+    local dx12_file = path.join(imgui_dir, 'backends', 'imgui_impl_dx12.cpp')
+    if os.isfile(dx12_file) then
+        local dx12 = io.readfile(dx12_file)
+        if dx12 then
+            local fixed_dx12, dx12_fixes = dx12:gsub('init_info%.SrvDescriptorHeap = srv_descriptor_heap;',
+                '(void)srv_descriptor_heap; // GBE RTL: ImGui_ImplDX12_InitInfo::SrvDescriptorHeap is commented out in this vendored backend')
+            if dx12_fixes > 0 then
+                if not io.writefile(dx12_file, fixed_dx12) then
+                    error('RTL imgui: failed to write "' .. dx12_file .. '"')
+                    return
+                end
+                print('RTL imgui: patched legacy ImGui_ImplDX12_Init() in ' .. dx12_file)
+            end
+        end
+    end
+
+    -- 4) libraqm build-time generated headers (next to its sources)
+    for _, rel_file in pairs({ 'config.h', 'raqm-version.h' }) do
+        local src = path.join(rtl_overlay_dir, 'raqm-gen', rel_file)
+        local dst = path.join(raqm_dir, 'src', rel_file)
+        if not os.isfile(src) then
+            error('RTL imgui: missing generated header: ' .. src)
+            return
+        end
+        if not os.copyfile(src, dst) then
+            error('RTL imgui: failed to copy "' .. src .. '" to "' .. dst .. '"')
+            return
+        end
+    end
+
+    -- 4) patch ingame_overlay's CMakeLists.txt
+    local cmake_file = path.join(overlay_dir, 'CMakeLists.txt')
+    local content = io.readfile(cmake_file)
+    if not content then
+        error('RTL imgui: cannot read "' .. cmake_file .. '"')
+        return
+    end
+
+    -- drop a block appended by an earlier run (the template may have changed since)
+    local block_removed
+    content, block_removed = content:gsub('\n# %-+\n# GBE_RTL_IMGUI_BEGIN.-\n# GBE_RTL_IMGUI_END\n# %-+\n', '\n', 1)
+    if block_removed == 0 then
+        print('RTL imgui: note: no previous GBE_RTL_IMGUI block found in ' .. cmake_file)
+    end
+
+    content = content .. string.format(rtl_cmake_block_template, path.translate(deps_dir, '/'))
+
+    if not io.writefile(cmake_file, content) then
+        error('RTL imgui: failed to write "' .. cmake_file .. '"')
+        return
+    end
+end
+
+if _OPTIONS["build-sheenbidi"] or _OPTIONS["all-build"] then
+    local sheenbidi_common_defs = {
+        "SB_CONFIG_EXPERIMENTAL_TEXT_API=OFF",
+        "SB_CONFIG_UNITY=ON",
+        "BUILD_GENERATOR=OFF",
+        "BUILD_TESTING=OFF",
+        "ENABLE_COVERAGE=OFF",
+        "ENABLE_ASAN=OFF",
+        "ENABLE_UBSAN=OFF",
+    }
+
+    if os.target() == 'windows' and string.match(_ACTION, 'vs.+') then
+        table.insert(sheenbidi_common_defs, "BUILD_SHARED_LIBS=OFF")
+    elseif string.match(_ACTION, 'gmake.*') then
+        table.insert(sheenbidi_common_defs, "BUILD_SHARED_LIBS=OFF")
+    end
+
+    if _OPTIONS["32-build"] then
+        cmake_build('sheenbidi', "32", sheenbidi_common_defs)
+    end
+    if _OPTIONS["64-build"] then
+        cmake_build('sheenbidi', "64", sheenbidi_common_defs)
+    end
+    if _OPTIONS["arm-build"] then
+        cmake_build('sheenbidi', "arm", sheenbidi_common_defs)
+    end
+end
+
+-- FreeType + HarfBuzz: text shaping dependencies of the RTL Dear ImGui fork
+-- (libraqm -> HarfBuzz -> FreeType, libraqm -> SheenBidi).
+if _OPTIONS["build-freetype"] or _OPTIONS["all-build"] then
+    local freetype_common_defs = {
+        "FT_DISABLE_ZLIB=TRUE",
+        "FT_DISABLE_BZIP2=TRUE",
+        "FT_DISABLE_PNG=TRUE",
+        "FT_DISABLE_HARFBUZZ=TRUE",
+        "FT_DISABLE_BROTLI=TRUE",
+        "BUILD_SHARED_LIBS=OFF",
+    }
+
+    if _OPTIONS["32-build"] then
+        cmake_build('freetype', "32", freetype_common_defs)
+    end
+    if _OPTIONS["64-build"] then
+        cmake_build('freetype', "64", freetype_common_defs)
+    end
+    if _OPTIONS["arm-build"] then
+        cmake_build('freetype', "arm", freetype_common_defs)
+    end
+end
+
+if _OPTIONS["build-harfbuzz"] or _OPTIONS["all-build"] then
+    local harfbuzz_common_defs = {
+        "HB_BUILD_SUBSET=OFF",
+        "HB_BUILD_RASTER=OFF",
+        "HB_BUILD_VECTOR=OFF",
+        "HB_BUILD_GPU=OFF",
+        "HB_BUILD_UTILS=OFF",
+        "HB_HAVE_FREETYPE=ON",
+        "HB_HAVE_CAIRO=OFF",
+        "HB_HAVE_GLIB=OFF",
+        "HB_HAVE_ICU=OFF",
+        "HB_HAVE_GRAPHITE2=OFF",
+        "HB_HAVE_GOBJECT=OFF",
+        "HB_HAVE_INTROSPECTION=OFF",
+        "BUILD_SHARED_LIBS=OFF",
+    }
+
+    -- HarfBuzz must be pointed at the FreeType we just built, otherwise it resolves the
+    -- host's FreeType (or fails to find any when cross compiling).
+    local function harfbuzz_arch_defs(arch)
+        local ft_prefix = path.join(deps_dir, 'freetype', 'install' .. arch)
+        local ft_lib_name = 'libfreetype.a'
+        if os.target() == 'windows' and string.match(_ACTION, 'vs.+') then
+            ft_lib_name = 'freetype.lib'
+        end
+        return merge_list(harfbuzz_common_defs, {
+            'FREETYPE_INCLUDE_DIR_ft2build=' .. path.join(ft_prefix, 'include', 'freetype2'),
+            'FREETYPE_INCLUDE_DIR_freetype2=' .. path.join(ft_prefix, 'include', 'freetype2'),
+            'FREETYPE_LIBRARY=' .. path.join(ft_prefix, 'lib', ft_lib_name),
+            'FREETYPE_LIBRARIES=' .. path.join(ft_prefix, 'lib', ft_lib_name),
+        })
+    end
+
+    if _OPTIONS["32-build"] then
+        cmake_build('harfbuzz', "32", harfbuzz_arch_defs("32"))
+    end
+    if _OPTIONS["64-build"] then
+        cmake_build('harfbuzz', "64", harfbuzz_arch_defs("64"))
+    end
+    if _OPTIONS["arm-build"] then
+        cmake_build('harfbuzz', "arm", harfbuzz_arch_defs("arm"))
+    end
+end
+
 if _OPTIONS["build-ingame_overlay"] or _OPTIONS["all-build"] then
     -- fixes 32-bit compilation of DX12
     local overaly_imgui_cfg_file = path.join(deps_dir, 'ingame_overlay', 'imconfig.imcfg')
@@ -832,6 +1183,9 @@ if _OPTIONS["build-ingame_overlay"] or _OPTIONS["all-build"] then
             table.insert(ingame_overlay_fixes, '-fpermissive')
         end
     end
+
+    -- swap the vendored Dear ImGui core for the RTL fork and add its shaping dependencies
+    apply_rtl_imgui_overlay_patch()
 
     if _OPTIONS["32-build"] then
         cmake_build('ingame_overlay/deps/System', "32", {
@@ -902,8 +1256,14 @@ if _OPTIONS["build-portaudio"] or _OPTIONS["all-build"] then
         "PA_USE_WASAPI=ON",
         "PA_USE_WDMKS=ON",
         "PA_USE_WDMKS_DEVICE_INFO=ON",
-        -- linux specific stuff
-        "PA_ALSA_DYNAMIC=OFF",
+        -- Linux specific stuff.
+        -- Load ALSA with dlopen(libasound.so.2) so the static library has no link-time
+        -- dependency on the host's audio libraries (same reason the optional host APIs
+        -- below are disabled: they would have to be linked into every final target).
+        "PA_ALSA_DYNAMIC=ON",
+        "PA_USE_JACK=OFF",
+        "PA_USE_PULSEAUDIO=OFF",
+        "PA_USE_SNDIO=OFF",
     }
 
     if _OPTIONS["32-build"] then
@@ -937,30 +1297,5 @@ if _OPTIONS["build-sdl"] or _OPTIONS["all-build"] then
     end
     if _OPTIONS["arm-build"] then
         cmake_build('sdl', "arm", sdl_common_defs)
-    end
-end
-
-if _OPTIONS["build-sheenbidi"] or _OPTIONS["all-build"] then
-    local sheenbidi_common_defs = {
-        "SB_CONFIG_EXPERIMENTAL_TEXT_API=OFF",
-        "SB_CONFIG_UNITY=ON",
-        "BUILD_GENERATOR=OFF",
-        "BUILD_TESTING=OFF",
-        "ENABLE_COVERAGE=OFF",
-        "ENABLE_ASAN=OFF",
-        "ENABLE_UBSAN=OFF",
-    }
-
-    if os.target() == 'windows' and string.match(_ACTION, 'vs.+') then
-        table.insert(sheenbidi_common_defs, "BUILD_SHARED_LIBS=OFF")
-    elseif string.match(_ACTION, 'gmake.*') then
-        table.insert(sheenbidi_common_defs, "BUILD_SHARED_LIBS=OFF")
-    end
-
-    if _OPTIONS["32-build"] then
-        cmake_build('sheenbidi', true, sheenbidi_common_defs, sheenbidi_cflags)
-    end
-    if _OPTIONS["64-build"] then
-        cmake_build('sheenbidi', false, sheenbidi_common_defs, sheenbidi_cflags)
     end
 end

@@ -55,3 +55,12 @@ cd build/project/vs2026/win
 ```
 
 See [the ci](./.github/workflows/emu-build-all-win-cross.yml) for more details.
+
+### RTL Dear ImGui dependencies
+
+`--all-ext --all-build` now also extracts and builds the text shaping dependencies used by
+the RTL overlay (FreeType, HarfBuzz, libraqm; SheenBidi is unchanged), and patches the
+extracted `ingame_overlay` so that its Dear ImGui core is the RTL fork
+(`third-party/imgui-rtl` submodule). Make sure the submodule is checked out
+(`git submodule update --init third-party/imgui-rtl`) if you build only some deps by hand.
+See [rtl imgui integration.md](./rtl%20imgui%20integration.md) for the details.

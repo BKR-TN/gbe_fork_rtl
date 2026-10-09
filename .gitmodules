@@ -36,3 +36,7 @@
 	path = third-party/deps/linux-arm
 	url = https://github.com/Detanup01/gbe_fork.git
 	branch = third-party/deps/linux-arm
+[submodule "third-party/imgui-rtl"]
+	path = third-party/imgui-rtl
+	url = https://github.com/BKR-TN/imgui_rtl.git
+	branch = rtl_support

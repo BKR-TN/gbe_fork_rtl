@@ -343,6 +343,9 @@ local deps_link = {
     "portaudio"          .. static_postfix,
     sdl_name             .. static_postfix,
     "SheenBidi"          .. static_postfix,
+    -- RTL Dear ImGui text shaping (libraqm -> HarfBuzz -> FreeType)
+    "harfbuzz"           .. static_postfix,
+    "freetype"           .. static_postfix,
 }
 -- add protobuf libs
 table_append(deps_link, {
@@ -497,6 +500,8 @@ local x32_deps_libdir = {
     path.join(deps_dir, "portaudio/install32/lib"),
     path.join(deps_dir, "sdl/install32/lib"),
     path.join(deps_dir, "sheenbidi/install32/lib"),
+    path.join(deps_dir, "freetype/install32/lib"),
+    path.join(deps_dir, "harfbuzz/install32/lib"),
 }
 
 local x32_deps_overlay_libdir = {
@@ -516,6 +521,8 @@ local x64_deps_libdir = {
     path.join(deps_dir, "portaudio/install64/lib"),
     path.join(deps_dir, "sdl/install64/lib"),
     path.join(deps_dir, "sheenbidi/install64/lib"),
+    path.join(deps_dir, "freetype/install64/lib"),
+    path.join(deps_dir, "harfbuzz/install64/lib"),
 }
 
 local x64_deps_overlay_libdir = {
@@ -534,6 +541,9 @@ local arm_deps_libdir = {
     path.join(deps_dir, "opus/installarm/lib"),
     path.join(deps_dir, "portaudio/installarm/lib"),
     path.join(deps_dir, "sdl/installarm/lib"),
+    path.join(deps_dir, "sheenbidi/installarm/lib"),
+    path.join(deps_dir, "freetype/installarm/lib"),
+    path.join(deps_dir, "harfbuzz/installarm/lib"),
 }
 
 local arm_deps_overlay_libdir = {

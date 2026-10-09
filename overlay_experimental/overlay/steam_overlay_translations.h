@@ -12,7 +12,7 @@ const char translationChat[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFFER_S
   u8"Chat",
 
 	// 1 - Arabic
-  u8"Chat",
+  u8"الدردشة",
 
 	// 2 - Bulgarian
   u8"Чат",
@@ -108,7 +108,7 @@ const char translationCopyId[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFFER
   u8"Copy ID",
 
 	// 1 - Arabic
-  u8"Copy ID",
+  u8"نسخ المعرّف (ID)",
 
 	// 2 - Bulgarian
   u8"Copy ID",
@@ -204,7 +204,7 @@ const char translationTestAchievement[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATI
   u8"Test achievement",
 
 	// 1 - Arabic
-  u8"Test achievement",
+  u8"إنجاز تجريبي",
 
 	// 2 - Bulgarian
   u8"Test achievement",
@@ -302,7 +302,7 @@ const char translationInvite[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFFER
   u8"Invite to Game",
 
 	// 1 - Arabic
-  u8"Invite to Game",
+  u8"أرسل دعوة",
 
 	// 2 - Bulgarian
   u8"Покана към игра",
@@ -398,7 +398,7 @@ const char translationInviteAll[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUF
   u8"Invite all",
 
 	// 1 - Arabic
-  u8"Invite all",
+  u8"ادع الجميع",
 
 	// 2 - Bulgarian
   u8"Invite all",
@@ -496,7 +496,7 @@ const char translationJoin[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFFER_S
   u8"Accept Game Invite",
 
 	// 1 - Arabic
-  u8"Accept Game Invite",
+  u8"اقبل الدعوة",
 
 	// 2 - Bulgarian
   u8"Приемане на игрална покана",
@@ -594,7 +594,7 @@ const char translationInvitedYouToJoinTheGame[TRANSLATION_NUMBER_OF_LANGUAGES][T
   u8"%s has invited you to play %llu",
 
 	// 1 - Arabic
-  u8"%s has invited you to play %llu",
+  u8"دعاك %s للعب %llu",
 
 	// 2 - Bulgarian
   u8"%s Ви покани да играете %llu",
@@ -692,7 +692,7 @@ const char translationAccept[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFFER
   u8"Accept",
 
 	// 1 - Arabic
-  u8"Accept",
+  u8"قبول",
 
 	// 2 - Bulgarian
   u8"Приемане",
@@ -790,7 +790,7 @@ const char translationRefuse[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFFER
   u8"Ignore",
 
 	// 1 - Arabic
-  u8"Ignore",
+  u8"تجاهل",
 
 	// 2 - Bulgarian
   u8"Игнориране",
@@ -888,7 +888,7 @@ const char translationSend[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFFER_S
   u8"Send Message",
 
 	// 1 - Arabic
-  u8"Send Message",
+  u8"أرسل رسالة",
 
 	// 2 - Bulgarian
   u8"Изпращане на съобщение",
@@ -984,7 +984,7 @@ const char translationUserPlaying[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_B
   u8"Username: %s (%llu) playing %u",
 
 	// 1 - Arabic
-  u8"Username: %s (%llu) playing %u",
+  u8"اسم المستخدم: %s (%llu) يلعب %u",
 
 	// 2 - Bulgarian
   u8"Username: %s (%llu) playing %u",
@@ -1080,7 +1080,7 @@ const char translationTotalTime[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUF
   u8"%uh %um",
 
 	// 1 - Arabic
-  u8"%uh %um",
+  u8"%u س %u د",
 
 	// 2 - Bulgarian
   u8"%uh %um",
@@ -1176,7 +1176,7 @@ const char translationTotalTimeText[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION
   u8"Total: %s  Session: %s",
 
 	// 1 - Arabic
-  u8"Total: %s  Session: %s",
+  u8"الإجمالي: %s  الجلسة الحالية: %s",
 
 	// 2 - Bulgarian
   u8"Total: %s  Session: %s",
@@ -1272,7 +1272,7 @@ const char translationRenderer[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFF
   u8"Renderer: %s",
 
 	// 1 - Arabic
-  u8"Renderer: %s",
+  u8"محرك العرض: %s",
 
 	// 2 - Bulgarian
   u8"Renderer: %s",
@@ -1368,7 +1368,7 @@ const char translationToggleUserInfo[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATIO
   u8"Toggle User Info",
 
 	// 1 - Arabic
-  u8"Toggle User Info",
+  u8"إظهار/إخفاء معلومات المستخدم",
 
 	// 2 - Bulgarian
   u8"Toggle User Info",
@@ -1464,7 +1464,7 @@ const char translationShowAchievements[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLAT
   u8"Show Achievements",
 
 	// 1 - Arabic
-  u8"Show Achievements",
+  u8"إظهار الإنجازات",
 
 	// 2 - Bulgarian
   u8"Show Achievements",
@@ -1562,7 +1562,7 @@ const char translationSettings[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFF
   u8"Settings",
 
 	// 1 - Arabic
-  u8"Settings",
+  u8"الإعدادات",
 
 	// 2 - Bulgarian
   u8"Настройки",
@@ -1658,7 +1658,7 @@ const char translationHistory[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFFE
   u8"History",
 
 	// 1 - Arabic
-  u8"History",
+  u8"السجل",
 
 	// 2 - Bulgarian
   u8"History",
@@ -1754,7 +1754,7 @@ const char translationScreenshots[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_B
   u8"Screenshots",
 
 	// 1 - Arabic
-  u8"Screenshots",
+  u8"لقطات الشاشة",
 
 	// 2 - Bulgarian
   u8"Screenshots",
@@ -1852,7 +1852,7 @@ const char translationFriends[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFFE
   u8"Friends",
 
 	// 1 - Arabic
-  u8"Friends",
+  u8"الأصدقاء",
 
 	// 2 - Bulgarian
   u8"Приятели",
@@ -1948,7 +1948,7 @@ const char translationNoNotification[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATIO
   u8"No notifications yet",
 
 	// 1 - Arabic
-  u8"No notifications yet",
+  u8"لا توجد إشعارات حتى الآن",
 
 	// 2 - Bulgarian
   u8"No notifications yet",
@@ -2044,7 +2044,7 @@ const char translationClearAll[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFF
   u8"Clear All",
 
 	// 1 - Arabic
-  u8"Clear All",
+  u8"مسح الكل",
 
 	// 2 - Bulgarian
   u8"Clear All",
@@ -2140,7 +2140,7 @@ const char translationHistoryChat[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_B
   u8"Chat",
 
 	// 1 - Arabic
-  u8"Chat",
+  u8"الدردشة",
 
 	// 2 - Bulgarian
   u8"Chat",
@@ -2236,7 +2236,7 @@ const char translationHistoryInvite[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION
   u8"Invite",
 
 	// 1 - Arabic
-  u8"Invite",
+  u8"دعوة",
 
 	// 2 - Bulgarian
   u8"Invite",
@@ -2332,7 +2332,7 @@ const char translationHistoryAchievement[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSL
   u8"Achievement",
 
 	// 1 - Arabic
-  u8"Achievement",
+  u8"إنجاز",
 
 	// 2 - Bulgarian
   u8"Achievement",
@@ -2428,7 +2428,7 @@ const char translationHistoryProgress[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATI
   u8"Progress",
 
 	// 1 - Arabic
-  u8"Progress",
+  u8"تقدم",
 
 	// 2 - Bulgarian
   u8"Progress",
@@ -2524,7 +2524,7 @@ const char translationHistoryAutoInvite[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLA
   u8"Auto-Invite",
 
 	// 1 - Arabic
-  u8"Auto-Invite",
+  u8"دعوة تلقائية",
 
 	// 2 - Bulgarian
   u8"Auto-Invite",
@@ -2620,7 +2620,7 @@ const char translationHistoryScreenshot[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLA
   u8"Screenshot",
 
 	// 1 - Arabic
-  u8"Screenshot",
+  u8"لقطة شاشة",
 
 	// 2 - Bulgarian
   u8"Screenshot",
@@ -2716,7 +2716,7 @@ const char translationShow[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFFER_S
   u8"Show",
 
 	// 1 - Arabic
-  u8"Show",
+  u8"إظهار",
 
 	// 2 - Bulgarian
   u8"Show",
@@ -2812,7 +2812,7 @@ const char translationUnlocked[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFF
   u8"Unlocked",
 
 	// 1 - Arabic
-  u8"Unlocked",
+  u8"مفتوح",
 
 	// 2 - Bulgarian
   u8"Unlocked",
@@ -2908,7 +2908,7 @@ const char translationNoUnlockedAchievements[TRANSLATION_NUMBER_OF_LANGUAGES][TR
   u8"No achievements unlocked yet",
 
 	// 1 - Arabic
-  u8"No achievements unlocked yet",
+  u8"لا توجد إنجازات مفتوحة حتى الآن",
 
 	// 2 - Bulgarian
   u8"No achievements unlocked yet",
@@ -3004,7 +3004,7 @@ const char translationLocked[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFFER
   u8"Locked",
 
 	// 1 - Arabic
-  u8"Locked",
+  u8"مقفل",
 
 	// 2 - Bulgarian
   u8"Locked",
@@ -3100,7 +3100,7 @@ const char translationAllAchievementsUnlocked[TRANSLATION_NUMBER_OF_LANGUAGES][T
   u8"All achievements unlocked!",
 
 	// 1 - Arabic
-  u8"All achievements unlocked!",
+  u8"تم فتح جميع الإنجازات!",
 
 	// 2 - Bulgarian
   u8"All achievements unlocked!",
@@ -3196,7 +3196,7 @@ const char translationAchievementWindow[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLA
   u8"Achievement Window",
 
 	// 1 - Arabic
-  u8"Achievement Window",
+  u8"نافذة الإنجازات",
 
 	// 2 - Bulgarian
   u8"Achievement Window",
@@ -3292,7 +3292,7 @@ const char translationListOfAchievements[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSL
   u8"List of achievements",
 
 	// 1 - Arabic
-  u8"List of achievements",
+  u8"قائمة الإنجازات",
 
 	// 2 - Bulgarian
   u8"List of achievements",
@@ -3388,7 +3388,7 @@ const char translationAchievements[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_
   u8"Achievements",
 
 	// 1 - Arabic
-  u8"Achievements",
+  u8"الإنجازات",
 
 	// 2 - Bulgarian
   u8"Achievements",
@@ -3484,7 +3484,7 @@ const char translationHiddenAchievement[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLA
   u8"hidden achievement",
 
 	// 1 - Arabic
-  u8"hidden achievement",
+  u8"إنجاز مخفي",
 
 	// 2 - Bulgarian
   u8"hidden achievement",
@@ -3580,7 +3580,7 @@ const char translationAchievedOn[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BU
   u8"achieved on %s",
 
 	// 1 - Arabic
-  u8"achieved on %s",
+  u8"أُنجز في %s",
 
 	// 2 - Bulgarian
   u8"achieved on %s",
@@ -3676,7 +3676,7 @@ const char translationNotAchieved[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_B
   u8"not achieved",
 
 	// 1 - Arabic
-  u8"not achieved",
+  u8"لم يُنجز",
 
 	// 2 - Bulgarian
   u8"not achieved",
@@ -3772,7 +3772,7 @@ const char translationGlobalSettingsWindow[TRANSLATION_NUMBER_OF_LANGUAGES][TRAN
   u8"Global Settings Window",
 
 	// 1 - Arabic
-  u8"Global Settings Window",
+  u8"نافذة الإعدادات العامة",
 
 	// 2 - Bulgarian
   u8"Global Settings Window",
@@ -3868,7 +3868,7 @@ const char translationGlobalSettingsWindowDescription[TRANSLATION_NUMBER_OF_LANG
   u8"These are global emulator settings and will apply to all games.",
 
 	// 1 - Arabic
-  u8"These are global emulator settings and will apply to all games.",
+  u8"هذه إعدادات عامة للمحاكي وستُطبق على جميع الألعاب.",
 
 	// 2 - Bulgarian
   u8"These are global emulator settings and will apply to all games.",
@@ -3964,7 +3964,7 @@ const char translationUsername[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFF
   u8"Username:",
 
 	// 1 - Arabic
-  u8"Username:",
+  u8"اسم المستخدم:",
 
 	// 2 - Bulgarian
   u8"Username:",
@@ -4060,7 +4060,7 @@ const char translationLanguage[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFF
   u8"Language:",
 
 	// 1 - Arabic
-  u8"Language:",
+  u8"اللغة:",
 
 	// 2 - Bulgarian
   u8"Language:",
@@ -4156,7 +4156,7 @@ const char translationSelectedLanguage[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLAT
   u8"Selected Language: %s",
 
 	// 1 - Arabic
-  u8"Selected Language: %s",
+  u8"اللغة المختارة: %s",
 
 	// 2 - Bulgarian
   u8"Selected Language: %s",
@@ -4252,7 +4252,7 @@ const char translationRestartTheGameToApply[TRANSLATION_NUMBER_OF_LANGUAGES][TRA
   u8"You may have to restart the game for these to apply.",
 
 	// 1 - Arabic
-  u8"You may have to restart the game for these to apply.",
+  u8"قد تحتاج إلى إعادة تشغيل اللعبة لتطبيق هذه التغييرات.",
 
 	// 2 - Bulgarian
   u8"You may have to restart the game for these to apply.",
@@ -4348,7 +4348,7 @@ const char translationSave[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFFER_S
   u8"Save",
 
 	// 1 - Arabic
-  u8"Save",
+  u8"حفظ",
 
 	// 2 - Bulgarian
   u8"Save",
@@ -4444,7 +4444,7 @@ const char translationWarning[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFFE
   u8"WARNING",
 
 	// 1 - Arabic
-  u8"WARNING",
+  u8"تحذير",
 
 	// 2 - Bulgarian
   u8"WARNING",
@@ -4540,7 +4540,7 @@ const char translationWarningDescription_badAppid[TRANSLATION_NUMBER_OF_LANGUAGE
   u8"AppID is 0, please create a steam_appid.txt with the right appid and restart the game.",
 
 	// 1 - Arabic
-  u8"AppID is 0, please create a steam_appid.txt with the right appid and restart the game.",
+  u8"قيمة AppID هي 0، يرجى إنشاء ملف steam_appid.txt يحتوي على AppID الصحيح ثم إعادة تشغيل اللعبة.",
 
 	// 2 - Bulgarian
   u8"AppID is 0, please create a steam_appid.txt with the right appid and restart the game.",
@@ -4636,7 +4636,7 @@ const char translationWarningDescription_localSave[TRANSLATION_NUMBER_OF_LANGUAG
   u8"local_save_path detected, the emu is saving locally to the game folder. Please delete it if you don't want this.",
 
 	// 1 - Arabic
-  u8"local_save_path detected, the emu is saving locally to the game folder. Please delete it if you don't want this.",
+  u8"تم اكتشاف local_save_path، ويقوم المحاكي بالحفظ محليًا داخل مجلد اللعبة. يرجى حذفه إذا كنت لا ترغب في ذلك.",
 
 	// 2 - Bulgarian
   u8"local_save_path detected, the emu is saving locally to the game folder. Please delete it if you don't want this.",
@@ -4732,7 +4732,7 @@ const char translationSteamOverlayURL[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATI
   u8"The game tried to get the steam overlay to open this url:",
 
 	// 1 - Arabic
-  u8"The game tried to get the steam overlay to open this url:",
+  u8"حاولت اللعبة فتح هذا الرابط عبر Steam Overlay:",
 
 	// 2 - Bulgarian
   u8"The game tried to get the steam overlay to open this url:",
@@ -4830,7 +4830,7 @@ const char translationClose[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFFER_
   u8"Close",
 
 	// 1 - Arabic
-  u8"Close",
+  u8"إغلاق",
 
 	// 2 - Bulgarian
   u8"Затваряне",
@@ -4926,7 +4926,7 @@ const char translationPlaying[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFFE
   u8"playing",
 
 	// 1 - Arabic
-  u8"playing",
+  u8"يلعب",
 
 	// 2 - Bulgarian
   u8"playing",
@@ -5022,7 +5022,7 @@ const char translationScreenshotSaved[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATI
   u8"Screenshot saved: ",
 
 	// 1 - Arabic
-  u8"Screenshot saved: ",
+  u8"تم حفظ لقطة الشاشة:",
 
 	// 2 - Bulgarian
   u8"Screenshot saved: ",
@@ -5118,7 +5118,7 @@ const char translationUnpinAll[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFF
   u8"Unpin all",
 
 	// 1 - Arabic
-  u8"Unpin all",
+  u8"إزالة تثبيت الكل",
 
 	// 2 - Bulgarian
   u8"Unpin all",
@@ -5214,7 +5214,7 @@ const char translationDeleteSelected[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATIO
   u8"Delete selected",
 
 	// 1 - Arabic
-  u8"Delete selected",
+  u8"حذف المحدد",
 
 	// 2 - Bulgarian
   u8"Delete selected",
@@ -5310,7 +5310,7 @@ const char translationOpenFolder[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BU
   u8"Open Folder",
 
 	// 1 - Arabic
-  u8"Open Folder",
+  u8"فتح المجلد",
 
 	// 2 - Bulgarian
   u8"Open Folder",
@@ -5406,7 +5406,7 @@ const char translationNoScreenshotsYet[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLAT
   u8"No screenshots yet",
 
 	// 1 - Arabic
-  u8"No screenshots yet",
+  u8"لا توجد لقطات شاشة حتى الآن",
 
 	// 2 - Bulgarian
   u8"No screenshots yet",
@@ -5502,7 +5502,7 @@ const char translationDelete[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFFER
   u8"Delete",
 
 	// 1 - Arabic
-  u8"Delete",
+  u8"حذف",
 
 	// 2 - Bulgarian
   u8"Delete",
@@ -5598,7 +5598,7 @@ const char translationScreenshotPreview[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLA
   u8"Screenshot Preview",
 
 	// 1 - Arabic
-  u8"Screenshot Preview",
+  u8"معاينة لقطة الشاشة",
 
 	// 2 - Bulgarian
   u8"Screenshot Preview",
@@ -5694,7 +5694,7 @@ const char translationPrev[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFFER_S
   u8"< Prev",
 
 	// 1 - Arabic
-  u8"< Prev",
+  u8"السابق <",
 
 	// 2 - Bulgarian
   u8"< Prev",
@@ -5790,7 +5790,7 @@ const char translationPin[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFFER_SI
   u8"Pin",
 
 	// 1 - Arabic
-  u8"Pin",
+  u8"تثبيت",
 
 	// 2 - Bulgarian
   u8"Pin",
@@ -5886,7 +5886,7 @@ const char translationCrop[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFFER_S
   u8"Crop",
 
 	// 1 - Arabic
-  u8"Crop",
+  u8"اقتصاص",
 
 	// 2 - Bulgarian
   u8"Crop",
@@ -5982,7 +5982,7 @@ const char translationNext[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFFER_S
   u8"Next >",
 
 	// 1 - Arabic
-  u8"Next >",
+  u8"التالي >",
 
 	// 2 - Bulgarian
   u8"Next >",
@@ -6078,7 +6078,7 @@ const char translationDeleteThisScreenshot[TRANSLATION_NUMBER_OF_LANGUAGES][TRAN
   u8"Delete this screenshot?",
 
 	// 1 - Arabic
-  u8"Delete this screenshot?",
+  u8"هل تريد حذف لقطة الشاشة هذه؟",
 
 	// 2 - Bulgarian
   u8"Delete this screenshot?",
@@ -6174,7 +6174,7 @@ const char translationDeleteAllScelectedScreenshots[TRANSLATION_NUMBER_OF_LANGUA
   u8"Delete all selected screenshots?",
 
 	// 1 - Arabic
-  u8"Delete all selected screenshots?",
+  u8"هل تريد حذف جميع لقطات الشاشة المحددة؟",
 
 	// 2 - Bulgarian
   u8"Delete all selected screenshots?",
@@ -6270,7 +6270,7 @@ const char translationYes[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFFER_SI
   u8"Yes",
 
 	// 1 - Arabic
-  u8"Yes",
+  u8"نعم",
 
 	// 2 - Bulgarian
   u8"Yes",
@@ -6366,7 +6366,7 @@ const char translationNo[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFFER_SIZ
   u8"No",
 
 	// 1 - Arabic
-  u8"No",
+  u8"لا",
 
 	// 2 - Bulgarian
   u8"No",
@@ -6462,7 +6462,7 @@ const char translationConfirmDelete[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION
   u8"Confirm Delete",
 
 	// 1 - Arabic
-  u8"Confirm Delete",
+  u8"تأكيد الحذف",
 
 	// 2 - Bulgarian
   u8"Confirm Delete",
@@ -6558,7 +6558,7 @@ const char translationConfirm[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFFE
   u8"Confirm",
 
 	// 1 - Arabic
-  u8"Confirm",
+  u8"تأكيد",
 
 	// 2 - Bulgarian
   u8"Confirm",
@@ -6654,7 +6654,7 @@ const char translationCancel[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFFER
   u8"Cancel",
 
 	// 1 - Arabic
-  u8"Cancel",
+  u8"إلغاء",
 
 	// 2 - Bulgarian
   u8"Cancel",
@@ -6750,7 +6750,7 @@ const char translationPinnedScreenshots[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLA
   u8"Pinned Screenshot###pinned_ss_%llu",
 
 	// 1 - Arabic
-  u8"Pinned Screenshot###pinned_ss_%llu",
+  u8"لقطة شاشة مثبتة###pinned_ss_%llu",
 
 	// 2 - Bulgarian
   u8"Pinned Screenshot###pinned_ss_%llu",
@@ -6846,7 +6846,7 @@ const char translationOpacity[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATION_BUFFE
   u8"Opacity",
 
 	// 1 - Arabic
-  u8"Opacity",
+  u8"الشفافية",
 
 	// 2 - Bulgarian
   u8"Opacity",
@@ -6942,7 +6942,7 @@ const char translationAutoAcceptFriendInvite[TRANSLATION_NUMBER_OF_LANGUAGES][TR
   u8"Invitations are controlled by auto_accept_invite.txt!",
 
 	// 1 - Arabic
-  u8"Invitations are controlled by auto_accept_invite.txt!",
+  u8"يتم التحكم في الدعوات عبر auto_accept_invite.txt!",
 
 	// 2 - Bulgarian
   u8"Invitations are controlled by auto_accept_invite.txt!",
@@ -7518,7 +7518,7 @@ const char translationPlaytimeCheckbox[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLAT
   u8"Playtime",
 
 	// 1 - Arabic
-  u8"Playtime",
+  u8"مدة اللعب",
 
 	// 2 - Bulgarian
   u8"Playtime",
