@@ -48,6 +48,13 @@ jobs:
         if: steps.emu-deps-cache-step.outputs.cache-hit != 'true'
         uses: actions/checkout@v6
 
+      # the RTL overlay build needs the Dear ImGui RTL fork; it lives in its own repository, so
+      # the branch checkouts below (which target branches of this repository) don't bring it in
+      - name: "Init RTL imgui fork submodule"
+        if: steps.emu-deps-cache-step.outputs.cache-hit != 'true'
+        working-directory: "${{ github.workspace }}"
+        run: git submodule update --init third-party/imgui-rtl
+
       - name: "Clone third-party deps (common/win)"
         if: steps.emu-deps-cache-step.outputs.cache-hit != 'true'
         uses: actions/checkout@v6
