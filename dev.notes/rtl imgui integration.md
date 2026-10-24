@@ -175,12 +175,17 @@ atlas ranges only cover the base codepoints.
 ### Layout: right-aligned labels and SameLine()
 
 The shaper right-aligns an RTL string that starts a line (it draws the text flush with the work
-area's right edge), but the layout cursor still advances left-to-right by the text width. Code
-that does `Text(label); SameLine(); InputText(...)` therefore draws the input over the
-right-aligned label as soon as the label is RTL (the settings window's username row). The overlay
-uses `ImGuiHelper_LabelInputText()` in `overlay_experimental/steam_overlay.cpp`, which detects
-the right alignment from the label's item rect and places the input to its left; LTR labels keep
-the original layout. Use the same pattern for any new label + inline widget row.
+area's right edge) while the layout cursor advances left-to-right by the text width. Since
+`imgui-rtl` `77f4ccdfe` the `SameLine()` continuation of such a label goes to its **left**:
+`Text(rtl); SameLine(); <widget>;` starts the widget at the line's left edge and, for
+width-honouring widgets (InputText, Slider, Combo, ...), clamps its width to the space left of
+the label (`anchor - spacing - line_start`), so nothing is drawn over the label. Width-ignoring
+items (Button, Text, Dummy, ...) simply start at the left edge, which is already clear of the
+label. `SameLine(explicit_offset)`, LTR labels and wrapped text are unchanged.
+
+`SetNextItemWidth(w)` makes the widget hug the label (`anchor - spacing - w`), but it must be
+called **before** `SameLine()`: `SameLine()` consumes the width to position the item, so
+setting it afterwards only changes the size, not the position.
 
 ## Maintaining this integration
 
