@@ -5022,7 +5022,7 @@ const char translationScreenshotSaved[TRANSLATION_NUMBER_OF_LANGUAGES][TRANSLATI
   u8"Screenshot saved: ",
 
 	// 1 - Arabic
-  u8"تم حفظ لقطة الشاشة:",
+  u8"تم حفظ لقطة الشاشة: ",
 
 	// 2 - Bulgarian
   u8"Screenshot saved: ",
