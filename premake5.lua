@@ -154,6 +154,7 @@ local build_dir = _OPTIONS["build-dir"]
 local function genproto()
     local deps_install_prefix = ''
     local harch = os.hostarch()
+    print(harch)
     if harch == "x86_64" then
         deps_install_prefix = 'install64'
     elseif harch == "ARM64" or harch == "AARCH64" then
@@ -457,6 +458,7 @@ local common_link_win = {
     "Gdi32"    .. static_postfix,
     "Dwmapi"   .. static_postfix,
     "OpenGL32" .. static_postfix,
+    "dxgi"     .. static_postfix,
 }
 -- add deps to win
 table_append(common_link_win, deps_link)
