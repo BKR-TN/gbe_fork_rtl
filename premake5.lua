@@ -476,6 +476,13 @@ local overlay_link = {
     "system", -- ingame_overlay dependency
     "mini_detour", -- ingame_overlay dependency
 }
+
+-- the new ingame_overlay uses XCB directly (imgui_impl_xcb backend + the X11 hooks),
+-- only the overlay-enabled targets need these at link time
+local overlay_link_linux = {
+    "xcb",
+    "xcb-keysyms",
+}
 -- we add them later when needed
 
 
@@ -1040,6 +1047,7 @@ project "api_experimental"
     filter { "system:not windows", }
         links {
             common_link_linux,
+            overlay_link_linux,
             "X11"
         }
 
@@ -1198,6 +1206,7 @@ project "steamclient_experimental"
     filter { "system:not windows", }
         links {
             common_link_linux,
+            overlay_link_linux,
         }
 
 

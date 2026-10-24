@@ -19,8 +19,9 @@ logical-order UTF-8.
 
 ### Dear ImGui RTL fork (`third-party/imgui-rtl`)
 
-An upstream-tracking Dear ImGui checkout (currently `1.93.0 WIP`, merged with upstream
-`2859f6723`) with a shaping layer, in the same style as the built-in FreeType glyph loader:
+An upstream-tracking Dear ImGui checkout (currently `1.93.1 WIP`, tracking upstream master
+and merged regularly) with a shaping layer, in the same style as the built-in FreeType glyph
+loader:
 
 - `imgui.h` / `imgui_internal.h` / `imgui_draw.cpp` / `imgui_widgets.cpp`:
   `ImFontShaper` interface, `ImFontAtlas::SetFontShaper()`, glyph-**index** lookup
@@ -40,12 +41,13 @@ An upstream-tracking Dear ImGui checkout (currently `1.93.0 WIP`, merged with up
 
 ### ingame_overlay's vendored Dear ImGui
 
-`third-party/deps/common/ingame_overlay/ingame_overlay.tar.gz` ships Dear ImGui 1.92.0
+`third-party/deps/common/ingame_overlay/ingame_overlay.tar.gz` ships Dear ImGui 1.92.9
 plus overlay-specific patches:
 
 - `backends/*`: precompiled DX9/10/11/12 shader blobs (no runtime `d3dcompiler`), an
   extended DX12 `RenderDrawData` signature, injected `GetKeyState` for the Win32
-  backend, a GLAD2 OpenGL loader path and an X11 platform backend;
+  backend, a GLAD2 OpenGL loader path and X11/XCB platform backends (the XCB hooks are
+  loaded with `dlopen`);
 - `imgui_win_shader_blobs.*` and `ImGui::BufferingBar()` / `ImGui::Spinner()` helpers.
 
 Those backends are compiled against the fork's core (they compile unmodified), so the
@@ -88,7 +90,11 @@ It has been removed; the translation header now carries normal logical-order Ara
 
 `premake5.lua` adds `freetype`/`harfbuzz` to the dependency link list (they are static,
 so the final targets need them) and their `install<arch>/lib` folders to the library
-search paths.
+search paths. Since the new overlay uses XCB directly (its ImGui XCB backend and the X11
+hook), `xcb` and `xcb-keysyms` are added to `overlay_link_linux`, which the two
+experimental (overlay-enabled) targets link; without them the resulting `steamclient.so`
+keeps undefined XCB symbols and only works if the game happens to load libxcb. The regular
+targets don't need them and are left untouched.
 
 ## Building
 
@@ -133,6 +139,26 @@ cd build/project/vs2026/win
 /opt/msvc/bin/x86/msbuild /nologo /v:n '/p:Configuration=release,Platform=Win32' gbe.slnx
 /opt/msvc/bin/x64/msbuild /nologo /v:n '/p:Configuration=release,Platform=x64' gbe.slnx
 ```
+
+### Cross-compiling quirks (msvc-wine)
+
+CMake's MSVC show-includes probe is unreliable under wine, so `cmake_build` patches the
+generated makefiles (`--filter-prefix=""` → `--filter-prefix="Note: including file:"`)
+between configure and build. Without that, the dependency files contain raw
+`Note: including file:` lines, which makes the *next* build fail with
+`multiple target patterns` in `compiler_depend.make`, and the dependency wrapper can
+mangle quoted compile definitions.
+
+`IMGUI_USER_CONFIG` is handled the same way: the overlay patch rewrites
+`IMGUI_USER_CONFIG_VALUE` so the compile definition is only the file name
+(`"imconfig.imcfg"`), resolved by `imgui.h` relative to its own directory where the deps
+script keeps a copy. `cl.exe` under wine cannot open unix-style absolute paths from a
+quoted macro, while CMake still needs the absolute path for the source list and install
+rules.
+
+Existing dependency build directories created before these fixes must be deleted once
+(e.g. `build/deps/win/vs2026/ingame_overlay/build64`), because the generated compiler files
+have the empty prefix baked in.
 
 ## Fonts
 

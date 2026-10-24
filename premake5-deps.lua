@@ -458,6 +458,27 @@ local function cmake_build(dep_folder, arch_iden, extra_cmd_defs, c_flags_init, 
         return
     end
 
+    -- CMake's MSVC show-includes prefix detection is unreliable under msvc-wine. When it fails,
+    -- CMake writes '--filter-prefix=""' into the generated makefiles, and its dependency
+    -- wrapper then mangles quoted compile definitions (cl reports C7772/C1083 for
+    -- IMGUI_USER_CONFIG) while the dependency files it writes break the next build.
+    -- Patch the generated makefiles before the build runs.
+    if os.target() == 'windows' and os.host() ~= 'windows' then
+        local patched_files = 0
+        for _, make_file in pairs(os.matchfiles(path.join(build_dir, '**', '*.make'))) do
+            local text = io.readfile(make_file)
+            if text and text:find('--filter-prefix=""', 1, true) then
+                text = text:gsub('%-%-filter%-prefix=""', '--filter-prefix="Note: including file:"')
+                if io.writefile(make_file, text) then
+                    patched_files = patched_files + 1
+                end
+            end
+        end
+        if patched_files > 0 then
+            print('patched msvc-wine dependency prefix in ' .. patched_files .. ' makefile(s)')
+        end
+    end
+
     -- verbose build
     local verbose_build_str = ''
     if _OPTIONS['verbose'] then
@@ -1043,6 +1064,23 @@ local function apply_rtl_imgui_overlay_patch()
         return
     end
 
+    -- The compile definition must be just the config file name: imgui.h resolves
+    -- '#include IMGUI_USER_CONFIG' relative to its own directory (we keep a copy of the config
+    -- there), and absolute unix paths are not usable by cl.exe when cross compiling with
+    -- msvc-wine. The IMGUI_USER_CONFIG variable itself stays absolute: the overlay CMake uses
+    -- it as a source file and in its install(FILES) list.
+    if not content:find('GBE_IMGUI_USER_CONFIG_NAME', 1, true) then
+        local old_value = 'set(IMGUI_USER_CONFIG_VALUE IMGUI_USER_CONFIG="${IMGUI_USER_CONFIG}")'
+        local new_value = 'get_filename_component(GBE_IMGUI_USER_CONFIG_NAME "${IMGUI_USER_CONFIG}" NAME)\n  ' ..
+            'set(IMGUI_USER_CONFIG_VALUE IMGUI_USER_CONFIG="${GBE_IMGUI_USER_CONFIG_NAME}")'
+        local value_start, value_end = content:find(old_value, 1, true)
+        if not value_start then
+            error('RTL imgui: cannot find the IMGUI_USER_CONFIG_VALUE line in "' .. cmake_file .. '"')
+            return
+        end
+        content = content:sub(1, value_start - 1) .. new_value .. content:sub(value_end + 1)
+    end
+
     -- drop a block appended by an earlier run (the template may have changed since)
     local block_removed
     content, block_removed = content:gsub('\n# %-+\n# GBE_RTL_IMGUI_BEGIN.-\n# GBE_RTL_IMGUI_END\n# %-+\n', '\n', 1)
@@ -1161,6 +1199,16 @@ if _OPTIONS["build-ingame_overlay"] or _OPTIONS["all-build"] then
         #define ImTextureID ImU64
     ]]) then
         error('failed to create ImGui config file for overlay: ' .. overaly_imgui_cfg_file)
+    end
+
+    -- Keep a copy next to ImGui's headers: imgui.h does '#include IMGUI_USER_CONFIG', and the
+    -- RTL patch turns the compile definition into just the file name (resolved relative to
+    -- imgui.h) while the CMake source list/install rules keep using the absolute path.
+    local imgui_dir_cfg_file = path.join(deps_dir, 'ingame_overlay', 'deps', 'ImGui', 'imconfig.imcfg')
+    if os.isdir(path.getdirectory(imgui_dir_cfg_file)) then
+        if not os.copyfile(overaly_imgui_cfg_file, imgui_dir_cfg_file) then
+            error('failed to copy ImGui config file for overlay to: ' .. imgui_dir_cfg_file)
+        end
     end
 
     local ingame_overlay_common_defs = {
