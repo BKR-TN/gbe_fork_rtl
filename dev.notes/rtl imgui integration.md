@@ -172,6 +172,16 @@ override) additionally gets real `GSUB`/`GPOS` shaping and mark positioning.
 Shaped glyphs are requested by **glyph index**, so they are loaded on demand even when the
 atlas ranges only cover the base codepoints.
 
+### Layout: right-aligned labels and SameLine()
+
+The shaper right-aligns an RTL string that starts a line (it draws the text flush with the work
+area's right edge), but the layout cursor still advances left-to-right by the text width. Code
+that does `Text(label); SameLine(); InputText(...)` therefore draws the input over the
+right-aligned label as soon as the label is RTL (the settings window's username row). The overlay
+uses `ImGuiHelper_LabelInputText()` in `overlay_experimental/steam_overlay.cpp`, which detects
+the right alignment from the label's item rect and places the input to its left; LTR labels keep
+the original layout. Use the same pattern for any new label + inline widget row.
+
 ## Maintaining this integration
 
 - **Updating the RTL fork**: bump the `third-party/imgui-rtl` submodule. Re-check that

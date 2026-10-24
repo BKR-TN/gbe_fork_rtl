@@ -96,6 +96,36 @@ static inline bool ImGuiHelper_BeginListBox(const char* label, int items_count) 
     return ImGui::BeginListBox(label, ImVec2(0.0f, height));
 }
 
+// Draws a label followed by a single-line text input.
+// The RTL shaper right-aligns a label that starts a line (by drawing it flush with the right
+// edge of the work area), but the layout cursor still advances left-to-right by the label's
+// width. A plain 'Text(); SameLine(); InputText();' therefore draws the input on top of the
+// right-aligned label. For such labels, place the input to their left instead.
+static void ImGuiHelper_LabelInputText(const char* id, const char* label, char* buf, size_t buf_size,
+    ImGuiInputTextFlags flags = 0) {
+    const ImVec2 line_start = ImGui::GetCursorScreenPos();
+    ImGui::TextUnformatted(label);
+    const ImVec2 label_min = ImGui::GetItemRectMin();
+    const bool right_aligned = label_min.x > line_start.x + 0.5f;
+    ImGui::SameLine();
+
+    if (right_aligned) {
+        const ImGuiStyle& style = ImGui::GetStyle();
+        float input_width = ImGui::CalcItemWidth();
+        if (input_width <= 0.0f) {
+            input_width = ImGui::GetContentRegionAvail().x;
+        }
+        float pos_x = label_min.x - style.ItemSpacing.x - input_width;
+        if (pos_x < line_start.x) {
+            pos_x = line_start.x;
+        }
+        ImGui::SetCursorScreenPos(ImVec2(pos_x, ImGui::GetCursorScreenPos().y));
+        ImGui::SetNextItemWidth(input_width);
+    }
+
+    ImGui::InputText(id, buf, buf_size, flags);
+}
+
 
 void Steam_Overlay::overlay_run_callback(void* object)
 {
@@ -2341,9 +2371,8 @@ void Steam_Overlay::render_main_window()
 
                 ImGui::Separator();
 
-                ImGui::Text("%s", translationUsername[current_language]);
-                ImGui::SameLine();
-                ImGui::InputText("##username", username_text, sizeof(username_text), 0);
+                ImGuiHelper_LabelInputText("##username", translationUsername[current_language], username_text,
+                    sizeof(username_text));
 
                 ImGui::Separator();
 
