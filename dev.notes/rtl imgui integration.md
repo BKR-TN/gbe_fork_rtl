@@ -112,6 +112,14 @@ cd build/project/gmake/linux
 make -j$(nproc) config=release_x64
 ```
 
+The 32-bit (x86) build links the overlay's XCB backend, so it needs the i386 xcb dev
+packages in addition to the usual multilib setup:
+
+```sh
+sudo dpkg --add-architecture i386 && sudo apt update
+sudo apt install libxcb1-dev:i386 libxcb-keysyms1-dev:i386
+```
+
 ### Windows (cross compiled from Linux, msvc-wine)
 
 See [cross compiling.md](./cross%20compiling.md) for the toolchain setup. The x86 and x64
